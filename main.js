@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-let scene, camera, renderer, model;
+let scene, camera, renderer, model, controls;
 
 function init() {
   // Setup scene
   scene = new THREE.Scene();
 
   // Setup camera
-  camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 1500);
-  camera.position.z = 8;
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
 
   // Setup renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -20,6 +21,13 @@ function init() {
   const light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(5, 5, 5).normalize();
   scene.add(light);
+
+  // Setup OrbitControls for mouse control
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; // Optional: smooth motion
+  controls.dampingFactor = 0.05;
+  controls.screenSpacePanning = false;
+  controls.maxPolarAngle = Math.PI / 2;
 
   // Load GLTF model
   const loader = new GLTFLoader();
@@ -48,6 +56,9 @@ function animate() {
   if (model) {
     model.rotation.y += 0.01;
   }
+
+  // Update controls for smooth camera movement
+  controls.update();
 
   renderer.render(scene, camera);
 }
