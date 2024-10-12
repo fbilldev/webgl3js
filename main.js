@@ -1,76 +1,63 @@
 import * as THREE from 'three';
-import WebGL from 'three/addons/capabilities/WebGL.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 0.1, 1000 );
+let scene, camera, renderer, model;
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setAnimationLoop( animate );
-document.body.appendChild( renderer.domElement );
+function init() {
+  // Setup scene
+  scene = new THREE.Scene();
 
-//const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-//const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-//const cube = new THREE.Mesh( geometry, material );
-//scene.add( cube );
+  // Setup camera
+  camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 1500);
+  camera.position.z = 8;
 
-camera.position.z = 2;
+  // Setup renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Add lighting
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 5, 5).normalize();
+  scene.add(light);
+
+  // Load GLTF model
+  const loader = new GLTFLoader();
+  loader.load(
+    './3d/gedung_tanaman/gedung_tanaman_reduced.gltf', // Replace with the path to your GLTF file
+    function (gltf) {
+      model = gltf.scene;
+      scene.add(model);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+    },
+    function (error) {
+      console.error('An error occurred while loading the model:', error);
+    }
+  );
+
+  // Start animation loop
+  animate();
+}
 
 function animate() {
+  requestAnimationFrame(animate);
 
-	//cube.rotation.x += 0.01;
-	//cube.rotation.y += 0.01;
+  // Rotate the model (optional)
+  if (model) {
+    model.rotation.y += 0.01;
+  }
 
-	renderer.render( scene, camera );
-
+  renderer.render(scene, camera);
 }
 
-if ( WebGL.isWebGL2Available() ) {
+window.addEventListener('resize', () => {
+  // Update renderer and camera on window resize
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
 
-	// Initiate function or other initializations here
-	//animate();
-	console.log( 'Web GL is available' );
-
-} else {
-
-	const warning = WebGL.getWebGL2ErrorMessage();
-	document.getElementById( 'container' ).appendChild( warning );
-	console.log( 'An error happened because no Web GL' );
-}
-
-// Loader GLTF
-
-// Instantiate a loader
-const loader = new GLTFLoader();
-
-// Optional: Provide a DRACOLoader instance to decode compressed mesh data
-//const dracoLoader = new DRACOLoader();
-//dracoLoader.setDecoderPath( '/examples/jsm/libs/draco/' );
-//loader.setDRACOLoader( dracoLoader );
-
-// Load a glTF resource
-loader.load(
-	// resource URL
-	'./3d/shiba/scene.gltf',
-	// called when the resource is loaded
-	function ( gltf ) {
-
-		scene.add( gltf.scene );
-
-		//gltf.animations; // Array<THREE.AnimationClip>
-		//gltf.scene; // THREE.Group
-		//gltf.scenes; // Array<THREE.Group>
-		//gltf.cameras; // Array<THREE.Camera>
-		//gltf.asset; // Object
-
-	},
-	// called while loading is progressing
-	function ( xhr ) {
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-	},
-	// called when loading has errors
-	function ( error ) {
-		console.log( 'An error happened' );
-	}
-);
+// Initialize the scene
+init();
