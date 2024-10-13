@@ -32,7 +32,7 @@ function init() {
   // Load GLTF model
   const loader = new GLTFLoader();
   loader.load(
-    './3d/gedung_tanaman/gedung_tanaman_reduced.gltf', // Replace with the path to your GLTF file
+    './3d/gedunggabung/AllBuilding.gltf', // Replace with the path to your GLTF file
     function (gltf) {
       model = gltf.scene;
       scene.add(model);
