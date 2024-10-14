@@ -10,7 +10,7 @@ function init() {
 
   // Setup camera
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 5;
+  camera.position.z = 120;
 
   // Setup renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -18,7 +18,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // Add lighting
-  const light = new THREE.DirectionalLight(0xffffff, 1);
+  const light = new THREE.DirectionalLight(0xffffff, 5);
   light.position.set(5, 5, 5).normalize();
   scene.add(light);
 
