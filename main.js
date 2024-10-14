@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-let scene, camera, renderer, model, controls;
+let scene, camera, renderer, model, controls, mixer, clock;
 
 function init() {
   // Setup scene
@@ -29,6 +29,9 @@ function init() {
   controls.screenSpacePanning = false;
   controls.maxPolarAngle = Math.PI / 2;
 
+  // Initialize clock for animation
+  clock = new THREE.Clock();
+
   // Load GLTF model
   const loader = new GLTFLoader();
   loader.load(
@@ -36,6 +39,17 @@ function init() {
     function (gltf) {
       model = gltf.scene;
       scene.add(model);
+
+      // Setup animation mixer for GLTF animations
+      mixer = new THREE.AnimationMixer(model);
+
+      // Play all animations from the model
+      if (gltf.animations.length > 0) {
+        gltf.animations.forEach((clip) => {
+          const action = mixer.clipAction(clip);
+          action.play();
+        });
+      }
     },
     function (xhr) {
       console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -52,12 +66,10 @@ function init() {
 function animate() {
   requestAnimationFrame(animate);
 
-  // Rotate the model (optional)
-  if (model) {
-    model.rotation.y += 0.01;
-  }
+  // Update animation mixer and controls
+  const delta = clock.getDelta();
+  if (mixer) mixer.update(delta);
 
-  // Update controls for smooth camera movement
   controls.update();
 
   renderer.render(scene, camera);
