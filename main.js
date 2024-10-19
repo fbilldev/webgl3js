@@ -22,6 +22,9 @@ function init() {
   light.position.set(5, 5, 5).normalize();
   scene.add(light);
 
+  //add background
+  scene.background = new THREE.Color(0x87CEEB);
+
   // Setup OrbitControls for mouse control
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true; // Optional: smooth motion
