@@ -19,7 +19,7 @@ function init() {
 
   // Add lighting
   //const light = new THREE.DirectionalLight(0xffffff, 4);
-  const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 5 );
+  const light = new THREE.HemisphereLight( 0xffffff, 0xffffbb, 3 );
   //light.position.set(5, 5, 5).normalize();
   scene.add(light);
 
