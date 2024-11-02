@@ -18,13 +18,15 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // Add lighting
-  //const light = new THREE.DirectionalLight(0xffffff, 4);
-  const light = new THREE.HemisphereLight( 0xffffff, 0xffffbb, 3 );
+  const light1 = new THREE.DirectionalLight(0xffffff, 2);
+  const light = new THREE.HemisphereLight( 0xffffff, 0xffffff, 2 );
   //light.position.set(5, 5, 5).normalize();
   scene.add(light);
+  scene.add(light1);
 
   //add background
   scene.background = new THREE.Color(0x87CEEB);
+  //scene.background = new THREE.Color(0x191919);
 
   // Setup OrbitControls for mouse control
   controls = new OrbitControls(camera, renderer.domElement);
