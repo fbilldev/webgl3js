@@ -18,8 +18,9 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // Add lighting
-  const light = new THREE.DirectionalLight(0xffffff, 6);
-  light.position.set(5, 5, 5).normalize();
+  //const light = new THREE.DirectionalLight(0xffffff, 4);
+  const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 5 );
+  //light.position.set(5, 5, 5).normalize();
   scene.add(light);
 
   //add background
