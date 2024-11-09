@@ -9,8 +9,16 @@ function init() {
   scene = new THREE.Scene();
 
   // Setup camera
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 120;
+  //camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  //camera.position.z = 150;
+
+  // Setup camera
+camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+// Atur posisi kamera untuk melihat model dari diagonal atas
+camera.position.set(130, 150, 130); // Menaikkan kamera di Y (atas) dan sedikit di X dan Z (diagonal)
+camera.lookAt(0, 0, 0); // Fokuskan kamera ke pusat model (asumsi model di pusat)
+
 
   // Setup renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
